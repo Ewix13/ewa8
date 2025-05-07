@@ -1,0 +1,179 @@
+---
+title: "zad8"
+format: 
+  html: 
+    embed-resources: true
+    self-contained-math: true
+    self-contained: true
+editor: visual
+execute: 
+  echo: true
+  warning: false
+  message: false
+---
+
+## First chart:
+
+![](images/unnamed%20(1).jpg)
+
+As I described in the last exercise, this chart is misleading because it compares single-year value to multi-year value. To improve this chart the last part 2017-2020 should be deleted.
+
+**Code explanation:**
+
+To explain the code I used {r,eval=FALSE}, so that the chunks illustrate the code without running it
+
+Firstly I loaded needed library. :
+
+```{r,eval=FALSE}
+library(ggplot2)
+```
+
+Then I created data frame that contained year and spendings to use later for plot. I used factor to make sure years are treated as categorical values and are in the right order. I used levels so that years are sorted in the correct order:
+
+```{r,eval=FALSE}
+d <- data.frame(
+  Rok = factor(c("2014", "2015", "2016", "2017", "2018", "2019"), levels = c("2014", "2015", "2016", "2017", "2018", "2019")),
+  Wydatki = c(0.0, 0.0, 0.0, 0.4, 1.4, 3.1)
+)
+```
+
+**Now for the plot:**
+
+Firstly I defined axises (ggplot(d, aes(x = Rok, y = Wydatki). By using geom_col() I added bars and colored them:
+
+```{r,eval=FALSE}
+ggplot(d, aes(x = Rok, y = Wydatki)) +
+  geom_col(fill = "deeppink3") 
+```
+
+I used geom_text() to add value labels for each bar. I used paste0 command so that bar will show not only numbers but also "mld zł " behind them as it was in the orginal plot. I used vjust so that the text is above the bar. I added ylim(0,4), so that the whole text above the bar is fully visible:
+
+```{r,eval=FALSE}
+  geom_text(aes(label = paste0(Wydatki, " mld zł")), vjust = -0.5, size = 5,color="white")
+```
+
+I added ylim(0,4), so that the whole text above the bar is fully visible:
+
+```{r,eval=FALSE}
+  ylim(0,4)
+```
+
+I added title and described both axes:
+
+```{r,eval=FALSE}
+  labs(
+    title = "Podwyżka wynagrodzeń nauczycieli finansowana z budżetu państwa",
+    y = "Kwota (mld zł)",
+    x = NULL
+  )
+```
+
+I changed plot type to dark to mach the original version:
+
+```{r,eval=FALSE}
+  theme_dark()
+```
+
+**R script:**
+
+```{r}
+library(ggplot2)
+
+d <- data.frame(
+  Rok = factor(c("2014", "2015", "2016", "2017", "2018", "2019"), levels = c("2014", "2015", "2016", "2017", "2018", "2019")),
+  Wydatki = c(0.0, 0.0, 0.0, 0.4, 1.4, 3.1)
+)
+
+ggplot(d, aes(x = Rok, y = Wydatki)) +
+  geom_col(fill = "deeppink3") +
+  geom_text(aes(label = paste0(Wydatki, " mld zł")), vjust = -0.5, size = 5,color="white") +
+  ylim(0,4)+
+  labs(
+    title = "Podwyżka wynagrodzeń nauczycieli finansowana z budżetu państwa",
+    y = "Kwota (mld zł)",
+    x = NULL
+  )+
+  theme_dark()
+
+
+```
+
+## Second chart:
+
+![](images/unnamed%20(2).jpg)
+
+Main problem with this one was that y-axis did not start with zero, so the bar lenghts were misleading for the viewer and also this plot is not aesteticly pleasing. I moved the y-axis to start in zero and made the plot more approachable:
+
+Firstly I created data frame to use later for the plot:
+
+```{r,eval=FALSE}
+dane <- data.frame(
+  Stacja = c("TVP2", "TVP1", "TVN", "Polsat"),
+  Udział = c(7.85, 7.76, 7.32, 7.26)
+)
+```
+
+**Plot:**
+
+I named axes, added bars and colored them:
+
+```{r,eval=FALSE}
+ggplot(dane, aes(x = Stacja, y = Udział)) +
+  geom_col(fill = "seagreen4") 
+```
+
+I used geom_text to add text above each bar:
+
+```{r,eval=FALSE}
+  geom_text(aes(label = paste0(Udział, "%")), vjust = -0.5, color = "black") 
+```
+
+The "scale_y_continous(limits=c(0,8))" sets y-axis scale from 0 to 8. I used ylim so that the text above the bar would be fully visible:
+
+```{r,eval=FALSE}
+  scale_y_continuous(limits = c(0, 8))
+```
+
+I used ylim so that the text above the bar would be fully visible:
+
+```{r,eval=FALSE}
+  ylim(0,9)
+```
+
+I added title and labeled each axises:
+
+```{r,eval=FALSE}
+  labs(
+    title = "Udziały 4 głównych stacji w marcu 2023",
+    y = "Udział w rynku (%)",
+    x = NULL
+  ) 
+```
+
+I changed the plot theme:
+
+```{r,eval=FALSE}
+  theme_minimal()
+```
+
+**Whole script:**
+
+```{r}
+dane <- data.frame(
+  Stacja = c("TVP2", "TVP1", "TVN", "Polsat"),
+  Udział = c(7.85, 7.76, 7.32, 7.26)
+)
+
+ggplot(dane, aes(x = Stacja, y = Udział)) +
+  geom_col(fill = "seagreen4") +
+  geom_text(aes(label = paste0(Udział, "%")), vjust = -0.5, color = "black") +
+  scale_y_continuous(limits = c(0, 8)) +
+  ylim(0,9)+
+  labs(
+    title = "Udziały 4 głównych stacji w marcu 2023",
+    y = "Udział w rynku (%)",
+    x = NULL
+  ) +
+  theme_minimal()
+
+```
